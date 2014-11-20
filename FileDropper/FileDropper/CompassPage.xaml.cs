@@ -140,12 +140,11 @@ namespace FileDropper
         /// session.  The state will be null the first time a page is visited.</param>
         private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            await loadData("http://gain.osk130.com/adprog/getdata.php?lat=13.730384&lon=100.528400&distance=30");
+            
             //await loadData("http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json?page_limit=16&page=1&country=us&apikey=592aacdwnb4649hcpjfkxy96");
             //FileData recieveFile = new FileData("MyFile", "13.8724809", "100.5830644", "Gain", "test.png");
 
-            string type = current_file.FileType;
-            this.fileImg.Source = new BitmapImage(new Uri("ms-appx:///Assets/" + type + ".png"));
+            
 
 
             geolocator = new Geolocator();
@@ -157,15 +156,32 @@ namespace FileDropper
             try
             {
                 myLocation = await geolocator.GetGeopositionAsync();
+                string mylat = myLocation.Coordinate.Point.Position.Latitude+"";
+                string mylng = myLocation.Coordinate.Point.Position.Longitude+"";
+                string radius = "100000000000";
+                string link = "http://gain.osk130.com/adprog/getdata.php?lat=" + mylat + "&lon=" + mylng + "&distance=" + radius;
+                Debug.WriteLine(link);
+                await loadData(link);
+                
             }
             catch (Exception ex)
             {
                 // Handle errors like unauthorized access to location
                 // services or no Internet access.
             }
+            string type = current_file.FileType;
+            this.fileImg.Source = new BitmapImage(new Uri("ms-appx:///Assets/" + type + ".png"));
             myMapControl.MapServiceToken = "HJ1Q_ons4LFZJNL4KONPmg";
-            myMapControl.Center = myLocation.Coordinate.Point;
-            myMapControl.ZoomLevel = 15;
+            if (DeviceInfo.IsRunningOnEmulator)
+            {
+                myMapControl.Center = current_file.Position;
+            }
+            else
+            {
+                myMapControl.Center = myLocation.Coordinate.Point;
+            }
+            myMapControl.ZoomLevel = 15d;
+
 
 
             Debug.WriteLine("Head : " + myLocation.Coordinate.Heading);
@@ -175,7 +191,22 @@ namespace FileDropper
             RandomAccessStreamReference refer = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/mylocation.png"));
             myLocationIcon.Image = refer;
             myLocationIcon.NormalizedAnchorPoint = new Point(0.5, 1.0);
-            myLocationIcon.Location = myLocation.Coordinate.Point;
+
+            //Testing on Emulator
+            if (DeviceInfo.IsRunningOnEmulator)
+            {
+
+                myLocationIcon.Location = new Geopoint(new BasicGeoposition
+                {
+                    Latitude = current_file.Position.Position.Latitude,
+                    Longitude = current_file.Position.Position.Longitude+0.01
+
+                });
+            }
+            else
+            {
+                myLocationIcon.Location = myLocation.Coordinate.Point;
+            }
             myLocationIcon.Title = "You are here";
             myMapControl.MapElements.Add(myLocationIcon);
 
@@ -183,17 +214,11 @@ namespace FileDropper
 
 
             destination = new MapIcon();
-            Geopoint position2 = new Geopoint(new BasicGeoposition()
-            {
-                Latitude = myLocation.Coordinate.Point.Position.Latitude,
-                Longitude = myLocation.Coordinate.Point.Position.Longitude + 0.001
-            });
             destination.Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/position02.png"));
             destination.NormalizedAnchorPoint = new Point(0.5, 1.0);
-            destination.Location = position2;
-            destination.Title = "Point";
+            destination.Location = current_file.Position;
+            destination.Title = current_file.Name;
             myMapControl.MapElements.Add(destination);
-
             geolocator.StatusChanged += geolocator_StatusChanged;
             geolocator.PositionChanged += geolocator_PositionChanged;
         }
@@ -224,7 +249,7 @@ namespace FileDropper
 
             brng = RadianToDegree(brng);
             brng = (brng + 360) % 360;
-            brng = 360 - brng;
+            //brng = 360 - brng;
             Debug.WriteLine("Angle: " + brng); ;
             return brng;
         }
@@ -393,6 +418,9 @@ namespace FileDropper
             {
                 JsonObject dataObject = groupValue.GetObject();
                 current_file = new FileData(dataObject);
+
+                //Get Only first Value
+                break;
             }
 
 

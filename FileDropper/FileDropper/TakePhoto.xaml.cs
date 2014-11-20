@@ -1,4 +1,4 @@
-﻿using CameraTest.Common;
+﻿using FileDropper.Common;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,11 +7,9 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Devices.Enumeration;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
-using Windows.Graphics.Display;
 using Windows.Media.Capture;
 using Windows.Media.MediaProperties;
 using Windows.Storage;
-using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -21,21 +19,20 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
-// The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
+// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
-namespace CameraTest
+namespace FileDropper
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-   
-    public sealed partial class Home : Page
+    public sealed partial class TakePhoto : Page
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         private MediaCapture captureManager = null;
         int cameradevice = 0;
-        public Home()
+        public TakePhoto()
         {
             this.InitializeComponent();
 
@@ -133,7 +130,7 @@ namespace CameraTest
                 CapturePreview.Source = captureManager;
                 await captureManager.StartPreviewAsync();
             }
-            
+
             InitCameraButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             TakePhotoButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
             CapturedImage.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
@@ -147,9 +144,9 @@ namespace CameraTest
 
             // create storage file in local app storage
             //StorageFile file = await ApplicationData.Current.LocalFolder.CreateFileAsync(
-              //  "TempPhoto.jpg",
-                //CreationCollisionOption.GenerateUniqueName);
-             
+            //  "TempPhoto.jpg",
+            //CreationCollisionOption.GenerateUniqueName);
+
             StorageFolder folder = KnownFolders.CameraRoll;
             StorageFile file = await folder.CreateFileAsync("SimpleShot.jpg", CreationCollisionOption.GenerateUniqueName);
             // take photo
@@ -181,12 +178,12 @@ namespace CameraTest
 
         private void toCompass_Click(object sender, RoutedEventArgs e)
         {
-           // Frame.Navigate(typeof(CompassPage)); 
+            // Frame.Navigate(typeof(CompassPage)); 
         }
 
         private async void switchCamera(object sender, RoutedEventArgs e)
         {
-            await captureManager.StopPreviewAsync();  
+            await captureManager.StopPreviewAsync();
             captureManager = new MediaCapture();
             var devices = await DeviceInformation.FindAllAsync(DeviceClass.VideoCapture);
             if (cameradevice == 0)
@@ -204,14 +201,13 @@ namespace CameraTest
                 });
             }
             CapturePreview.Source = captureManager;
-            await captureManager.StartPreviewAsync();           
+            await captureManager.StartPreviewAsync();
         }
 
         private void toVideoCapture(object sender, RoutedEventArgs e)
         {
             // Frame.Navigate(typeof(VideoCapturePage)); 
         }
-
 
     }
 }
