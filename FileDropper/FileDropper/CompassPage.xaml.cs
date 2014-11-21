@@ -81,7 +81,7 @@ namespace FileDropper
                 _compass.ReportInterval = reportInterval;
                 _compass.ReadingChanged += new TypedEventHandler<Compass, CompassReadingChangedEventArgs>(ReadingChanged);
             }
-           
+
 
         }
 
@@ -100,7 +100,8 @@ namespace FileDropper
                 //Debug.WriteLine("Magnetic: " + magnetic + " North: " + north);
                 double angle = Convert.ToDouble(magnetic);
                 Storyboard board = new Storyboard();
-                if (current_north != angle) {
+                if (current_north != angle)
+                {
                     updateIndicator();
                 }
                 current_north = -angle;
@@ -111,7 +112,7 @@ namespace FileDropper
                 timeline.KeyFrames.Add(frame);
                 board.Children.Add(timeline);
 
-                
+
 
                 board.Begin();
             });
@@ -146,7 +147,7 @@ namespace FileDropper
         /// session.  The state will be null the first time a page is visited.</param>
         private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            
+
             //await loadData("http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json?page_limit=16&page=1&country=us&apikey=592aacdwnb4649hcpjfkxy96");
             //FileData recieveFile = new FileData("MyFile", "13.8724809", "100.5830644", "Gain", "test.png");
 
@@ -160,17 +161,17 @@ namespace FileDropper
                 }
                 else
                 {
-                    
+
                     ShowToastNotification("You have obtain " + current_file.NearestFile.FileName + " by " + current_file.NearestFile.DropBy);
                     await loadFile("http://gain.osk130.com/adprog/files/" + current_file.NearestFile.FileName, current_file.NearestFile.FileType);
                 }
-            
+
             };
             geolocator = new Geolocator();
             geolocator.DesiredAccuracy = PositionAccuracy.High;
             geolocator.MovementThreshold = 1; // The units are meters.
 
-            
+
             //Geoposition geoposition = null;
             Debug.WriteLine("Before Try");
             try
@@ -179,13 +180,13 @@ namespace FileDropper
                 myLocation = await geolocator.GetGeopositionAsync(
                     maximumAge: TimeSpan.FromMinutes(5),
                     timeout: TimeSpan.FromSeconds(10));
-                string mylat = myLocation.Coordinate.Point.Position.Latitude+"";
-                string mylng = myLocation.Coordinate.Point.Position.Longitude+"";
+                string mylat = myLocation.Coordinate.Point.Position.Latitude + "";
+                string mylng = myLocation.Coordinate.Point.Position.Longitude + "";
                 string radius = "100000000000";
                 string link = "http://gain.osk130.com/adprog/getdata.php?lat=" + mylat + "&lon=" + mylng + "&distance=" + radius;
                 Debug.WriteLine(link);
-                await loadData(link,myLocation.Coordinate.Point);
-                
+                await loadData(link, myLocation.Coordinate.Point);
+
             }
             catch (UnauthorizedAccessException ex)
             {
@@ -193,10 +194,10 @@ namespace FileDropper
                 // user should setup his location
                 Debug.WriteLine("Position not Found UnAuthorize: " + ex.StackTrace);
             }
-            
+
             Debug.WriteLine("Done Try");
             string type = current_file.NearestFile.FileType;
-            Debug.WriteLine("Type: "+type);
+            Debug.WriteLine("Type: " + type);
             this.fileImg.Source = new BitmapImage(new Uri("ms-appx:///Assets/" + type + ".png"));
             myMapControl.MapServiceToken = "HJ1Q_ons4LFZJNL4KONPmg";
             if (DeviceInfo.IsRunningOnEmulator)
@@ -226,7 +227,7 @@ namespace FileDropper
                 myLocationIcon.Location = new Geopoint(new BasicGeoposition
                 {
                     Latitude = current_file.NearestFile.Position.Position.Latitude,
-                    Longitude = current_file.NearestFile.Position.Position.Longitude+0.01
+                    Longitude = current_file.NearestFile.Position.Position.Longitude + 0.01
 
                 });
             }
@@ -250,24 +251,24 @@ namespace FileDropper
             geolocator.PositionChanged += geolocator_PositionChanged;
         }
 
-        private void simpleToast_Click(object sender, RoutedEventArgs e)  
-        {  
-            ToastTemplateType toastType = ToastTemplateType.ToastText02;  
-  
-            XmlDocument toastXml = ToastNotificationManager.GetTemplateContent(toastType);  
-  
-            XmlNodeList toastTextElement = toastXml.GetElementsByTagName("text");  
-            toastTextElement[0].AppendChild(toastXml.CreateTextNode("Hello C# Corner"));  
-            toastTextElement[1].AppendChild(toastXml.CreateTextNode("I am poping you from a Winmdows Phone App"));  
-  
-            IXmlNode toastNode= toastXml.SelectSingleNode("/toast");  
-            ((XmlElement)toastNode).SetAttribute("duration","long");  
-  
-            ToastNotification toast = new ToastNotification(toastXml);  
-            ToastNotificationManager.CreateToastNotifier().Show(toast);  
-  
-  
-        }  
+        private void simpleToast_Click(object sender, RoutedEventArgs e)
+        {
+            ToastTemplateType toastType = ToastTemplateType.ToastText02;
+
+            XmlDocument toastXml = ToastNotificationManager.GetTemplateContent(toastType);
+
+            XmlNodeList toastTextElement = toastXml.GetElementsByTagName("text");
+            toastTextElement[0].AppendChild(toastXml.CreateTextNode("Hello C# Corner"));
+            toastTextElement[1].AppendChild(toastXml.CreateTextNode("I am poping you from a Winmdows Phone App"));
+
+            IXmlNode toastNode = toastXml.SelectSingleNode("/toast");
+            ((XmlElement)toastNode).SetAttribute("duration", "long");
+
+            ToastNotification toast = new ToastNotification(toastXml);
+            ToastNotificationManager.CreateToastNotifier().Show(toast);
+
+
+        }
         private void ShowToastNotification(String message)
         {
             ToastTemplateType toastTemplate = ToastTemplateType.ToastImageAndText01;
@@ -306,9 +307,9 @@ namespace FileDropper
             double long2 = point2.Position.Longitude;
 
             //return in meter
-            return DistanceAlgorithm.DistanceBetweenPlaces(long1, lat1, long2, lat2)*1000;
+            return DistanceAlgorithm.DistanceBetweenPlaces(long1, lat1, long2, lat2) * 1000;
         }
-        private double angleFromCoordinate(Geopoint point1,Geopoint point2)
+        private double angleFromCoordinate(Geopoint point1, Geopoint point2)
         {
             double lat1 = point1.Position.Latitude;
             double lat2 = point2.Position.Latitude;
@@ -328,7 +329,7 @@ namespace FileDropper
             Debug.WriteLine("Angle: " + brng); ;
             return brng;
         }
-    
+
         private double DegreeToRadian(double angle)
         {
             return Math.PI * angle / 180.0;
@@ -338,7 +339,7 @@ namespace FileDropper
         {
             return angle * (180.0 / Math.PI);
         }
-   
+
         async void geolocator_StatusChanged(Geolocator sender, StatusChangedEventArgs args)
         {
             string status = "";
@@ -372,9 +373,8 @@ namespace FileDropper
             }
 
             await _cd.RunAsync(CoreDispatcherPriority.Normal, () =>
-            
             {
-                Debug.WriteLine( status);
+                Debug.WriteLine(status);
             });
         }
 
@@ -395,23 +395,27 @@ namespace FileDropper
                     myLocationIcon.Image = refer;
                     myLocationIcon.NormalizedAnchorPoint = new Point(0.5, 1.0);
                     myLocationIcon.Title = "You are here";
-                   
+
                 }
                 myLocationIcon.Location = change.Point;
+                //Update Destination
+                current_file.refreshNearestFile(myLocationIcon.Location);
+                destination.Location = current_file.NearestFile.Position;
 
+                //End Update Destination
                 myMapControl.MapElements.Add(myLocationIcon);
                 double angle = angleFromCoordinate(myLocationIcon.Location, destination.Location);
                 current_angle = angle;
 
                 updateIndicator();
-               
+
                 updateDistance();
                 updateUserFile();
                 //await Task.Delay(500);
 
-                
-                
-                
+
+
+
             });
         }
         private void updateUserFile()
@@ -419,6 +423,13 @@ namespace FileDropper
             this.filename.Text = current_file.NearestFile.Name;
             this.type.Text = current_file.NearestFile.FileName;
             this.user.Text = current_file.NearestFile.DropBy;
+            string type = current_file.NearestFile.FileType;
+            Debug.WriteLine("Type: " + type);
+            ImageSource filetypeImage = new BitmapImage(new Uri("ms-appx:///Assets/" + type + ".png"));
+            if (this.fileImg.Source != filetypeImage )
+            {
+                this.fileImg.Source = filetypeImage;
+            }
         }
         private void updateFilePosition()
         {
@@ -462,7 +473,7 @@ namespace FileDropper
                 Storyboard.SetTarget(timeline, rotateTransform);
                 Storyboard.SetTargetProperty(timeline, "Angle");
                 //Debug.WriteLine("Current North: " + current_north + " Current Angle: " + current_angle);
-                double indicator_angle = (360 + current_north + current_angle)%360;
+                double indicator_angle = (360 + current_north + current_angle) % 360;
                 //Debug.WriteLine("Indicator Angle: " + indicator_angle);
                 var frame = new EasingDoubleKeyFrame() { KeyTime = TimeSpan.FromSeconds(1), Value = indicator_angle, EasingFunction = new QuadraticEase() { EasingMode = EasingMode.EaseOut } };
                 timeline.KeyFrames.Add(frame);
@@ -526,10 +537,22 @@ namespace FileDropper
             //string url2 = await client.GetStringAsync(dataUri);
             CancellationTokenSource cts = new CancellationTokenSource();
             CancellationToken token = cts.Token;
-            await SaveStreamToFile(stream_file, current_file.NearestFile.FileName, token);
-           
+            StorageFile file = await SaveStreamToFile(stream_file, current_file.NearestFile.FileName, token);
+            var success = await Windows.System.Launcher.LaunchFileAsync(file);
+
+            if (success)
+            {
+                // File launched
+                Debug.WriteLine("File Launch");
+            }
+            else
+            {
+                // File launch failed
+
+                Debug.WriteLine("File Launch Failed");
+            }
         }
-        public async Task SaveStreamToFile(Stream streamToSave, string fileName, CancellationToken cancelToken)
+        public async Task<StorageFile> SaveStreamToFile(Stream streamToSave, string fileName, CancellationToken cancelToken)
         {
             StorageFile file = await ApplicationData.Current.TemporaryFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
             using (Stream fileStram = await file.OpenStreamForWriteAsync())
@@ -544,9 +567,10 @@ namespace FileDropper
                     cancelToken.ThrowIfCancellationRequested();
                 }
             }
+            return file;
         }
 
-        public async Task loadData(string url,Geopoint point)
+        public async Task loadData(string url, Geopoint point)
         {
             Debug.WriteLine("Start Loading");
             Uri dataUri = new Uri(url);
@@ -559,19 +583,18 @@ namespace FileDropper
             //handle none json
             if (jsonText.Contains("<!DOCTYPE html>"))
             {
-                jsonText = jsonText.Substring(jsonText.IndexOf("<body>")+6, jsonText.LastIndexOf("</body>")-((jsonText.IndexOf("<body>")+6)));
+                jsonText = jsonText.Substring(jsonText.IndexOf("<body>") + 6, jsonText.LastIndexOf("</body>") - ((jsonText.IndexOf("<body>") + 6)));
             }
             Debug.WriteLine(jsonText);
             JsonArray jsonArray = JsonArray.Parse(jsonText);
             current_file = new FileList(jsonArray, point);
-           
+
 
 
         }
-
         private void toTakePhotoPage(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(TakePhoto)); 
+            Frame.Navigate(typeof(TakePhoto));
         }
 
     }
