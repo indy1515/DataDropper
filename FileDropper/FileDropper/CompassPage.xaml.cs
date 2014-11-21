@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Data.Json;
+using Windows.Data.Xml.Dom;
 using Windows.Devices.Geolocation;
 using Windows.Devices.Sensors;
 using Windows.Foundation;
@@ -16,6 +17,7 @@ using Windows.Graphics.Display;
 using Windows.Storage.Streams;
 using Windows.UI;
 using Windows.UI.Core;
+using Windows.UI.Notifications;
 using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
@@ -54,13 +56,15 @@ namespace FileDropper
         private double current_north = 0;
 
         // Current FileData
-        public static FileData current_file = new FileData();
+        public static FileList current_file = new FileList();
+        //public static FileData current_file = new FileData();
         public CompassPage()
         {
             this.InitializeComponent();
 
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
+            Debug.WriteLine("Did Load on Create");
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
             _cd = Window.Current.CoreWindow.Dispatcher;
 
@@ -144,8 +148,11 @@ namespace FileDropper
             //await loadData("http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json?page_limit=16&page=1&country=us&apikey=592aacdwnb4649hcpjfkxy96");
             //FileData recieveFile = new FileData("MyFile", "13.8724809", "100.5830644", "Gain", "test.png");
 
-            
-
+            Debug.WriteLine("Did Load");
+            this.pickBtn.Click += (o, eb) =>
+            {
+                ShowToastNotification("Test Title");
+            };
 
             geolocator = new Geolocator();
             geolocator.DesiredAccuracy = PositionAccuracy.High;
@@ -153,28 +160,36 @@ namespace FileDropper
 
             
             //Geoposition geoposition = null;
+            Debug.WriteLine("Before Try");
             try
             {
-                myLocation = await geolocator.GetGeopositionAsync();
+                Debug.WriteLine("After Try");
+                myLocation = await geolocator.GetGeopositionAsync(
+                    maximumAge: TimeSpan.FromMinutes(5),
+                    timeout: TimeSpan.FromSeconds(10));
                 string mylat = myLocation.Coordinate.Point.Position.Latitude+"";
                 string mylng = myLocation.Coordinate.Point.Position.Longitude+"";
                 string radius = "100000000000";
                 string link = "http://gain.osk130.com/adprog/getdata.php?lat=" + mylat + "&lon=" + mylng + "&distance=" + radius;
                 Debug.WriteLine(link);
-                await loadData(link);
+                await loadData(link,myLocation.Coordinate.Point);
                 
             }
-            catch (Exception ex)
+            catch (UnauthorizedAccessException ex)
             {
-                // Handle errors like unauthorized access to location
-                // services or no Internet access.
+                // location services disabled or other error
+                // user should setup his location
+                Debug.WriteLine("Position not Found UnAuthorize: " + ex.StackTrace);
             }
-            string type = current_file.FileType;
+            
+            Debug.WriteLine("Done Try");
+            string type = current_file.NearestFile.FileType;
+            Debug.WriteLine("Type: "+type);
             this.fileImg.Source = new BitmapImage(new Uri("ms-appx:///Assets/" + type + ".png"));
             myMapControl.MapServiceToken = "HJ1Q_ons4LFZJNL4KONPmg";
             if (DeviceInfo.IsRunningOnEmulator)
             {
-                myMapControl.Center = current_file.Position;
+                myMapControl.Center = current_file.NearestFile.Position;
             }
             else
             {
@@ -198,8 +213,8 @@ namespace FileDropper
 
                 myLocationIcon.Location = new Geopoint(new BasicGeoposition
                 {
-                    Latitude = current_file.Position.Position.Latitude,
-                    Longitude = current_file.Position.Position.Longitude+0.01
+                    Latitude = current_file.NearestFile.Position.Position.Latitude,
+                    Longitude = current_file.NearestFile.Position.Position.Longitude+0.01
 
                 });
             }
@@ -216,14 +231,43 @@ namespace FileDropper
             destination = new MapIcon();
             destination.Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/position02.png"));
             destination.NormalizedAnchorPoint = new Point(0.5, 1.0);
-            destination.Location = current_file.Position;
-            destination.Title = current_file.Name;
+            destination.Location = current_file.NearestFile.Position;
+            destination.Title = current_file.NearestFile.Name;
             myMapControl.MapElements.Add(destination);
             geolocator.StatusChanged += geolocator_StatusChanged;
             geolocator.PositionChanged += geolocator_PositionChanged;
         }
+        private void ShowToastNotification(String message)
+        {
+            ToastTemplateType toastTemplate = ToastTemplateType.ToastImageAndText01;
+            XmlDocument toastXml = ToastNotificationManager.GetTemplateContent(toastTemplate);
 
-        private double getdistancebtw(Geopoint point1, Geopoint point2)
+            // Set Text
+            XmlNodeList toastTextElements = toastXml.GetElementsByTagName("text");
+            toastTextElements[0].AppendChild(toastXml.CreateTextNode(message));
+
+            // Set image
+            // Images must be less than 200 KB in size and smaller than 1024 x 1024 pixels.
+            XmlNodeList toastImageAttributes = toastXml.GetElementsByTagName("image");
+            ((XmlElement)toastImageAttributes[0]).SetAttribute("src", "ms-appx:///Images/logo-80px-80px.png");
+            ((XmlElement)toastImageAttributes[0]).SetAttribute("alt", "logo");
+
+            // toast duration
+            IXmlNode toastNode = toastXml.SelectSingleNode("/toast");
+            ((XmlElement)toastNode).SetAttribute("duration", "short");
+
+            // toast navigation
+            var toastNavigationUriString = "#/MainPage.xaml?param1=12345";
+            var toastElement = ((XmlElement)toastXml.SelectSingleNode("/toast"));
+            toastElement.SetAttribute("launch", toastNavigationUriString);
+
+            // Create the toast notification based on the XML content you've specified.
+            ToastNotification toast = new ToastNotification(toastXml);
+
+            // Send your toast notification.
+            ToastNotificationManager.CreateToastNotifier().Show(toast);
+        }
+        public static double getdistancebtw(Geopoint point1, Geopoint point2)
         {
             double lat1 = point1.Position.Latitude;
             double lat2 = point2.Position.Latitude;
@@ -329,6 +373,7 @@ namespace FileDropper
                 current_angle = angle;
 
                 updateIndicator();
+               
                 updateDistance();
                 updateUserFile();
                 //await Task.Delay(500);
@@ -340,8 +385,24 @@ namespace FileDropper
         }
         private void updateUserFile()
         {
-            this.type.Text = current_file.FileName;
-            this.user.Text = current_file.DropBy;
+            this.filename.Text = current_file.NearestFile.Name;
+            this.type.Text = current_file.NearestFile.FileName;
+            this.user.Text = current_file.NearestFile.DropBy;
+        }
+        private void updateFilePosition()
+        {
+            Storyboard board = new Storyboard();
+            var timeline = new DoubleAnimationUsingKeyFrames();
+            Storyboard.SetTarget(timeline, rotateTransform);
+            Storyboard.SetTargetProperty(timeline, "Angle");
+            //Debug.WriteLine("Current North: " + current_north + " Current Angle: " + current_angle);
+            double indicator_angle = (360 + current_north + current_angle) % 360;
+            //Debug.WriteLine("File Angle: " + indicator_angle);
+            var frame = new EasingDoubleKeyFrame() { KeyTime = TimeSpan.FromSeconds(1), Value = indicator_angle, EasingFunction = new QuadraticEase() { EasingMode = EasingMode.EaseOut } };
+            timeline.KeyFrames.Add(frame);
+            board.Children.Add(timeline);
+
+            board.Begin();
         }
         private void updateDistance()
         {
@@ -369,9 +430,9 @@ namespace FileDropper
                 var timeline = new DoubleAnimationUsingKeyFrames();
                 Storyboard.SetTarget(timeline, rotateTransform);
                 Storyboard.SetTargetProperty(timeline, "Angle");
-                Debug.WriteLine("Current North: " + current_north + " Current Angle: " + current_angle);
+                //Debug.WriteLine("Current North: " + current_north + " Current Angle: " + current_angle);
                 double indicator_angle = (360 + current_north + current_angle)%360;
-                Debug.WriteLine("Indicator Angle: " + indicator_angle);
+                //Debug.WriteLine("Indicator Angle: " + indicator_angle);
                 var frame = new EasingDoubleKeyFrame() { KeyTime = TimeSpan.FromSeconds(1), Value = indicator_angle, EasingFunction = new QuadraticEase() { EasingMode = EasingMode.EaseOut } };
                 timeline.KeyFrames.Add(frame);
                 board.Children.Add(timeline);
@@ -389,6 +450,7 @@ namespace FileDropper
         /// serializable state.</param>
         private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
+
         }
 
         #region NavigationHelper registration
@@ -420,8 +482,9 @@ namespace FileDropper
 
         
 
-        public async Task loadData(string url)
+        public async Task loadData(string url,Geopoint point)
         {
+            Debug.WriteLine("Start Loading");
             Uri dataUri = new Uri(url);
 
             Debug.WriteLine(dataUri);
@@ -436,14 +499,8 @@ namespace FileDropper
             }
             Debug.WriteLine(jsonText);
             JsonArray jsonArray = JsonArray.Parse(jsonText);
-            foreach (JsonValue groupValue in jsonArray)
-            {
-                JsonObject dataObject = groupValue.GetObject();
-                current_file = new FileData(dataObject);
-
-                //Get Only first Value
-                break;
-            }
+            current_file = new FileList(jsonArray, point);
+           
 
 
         }

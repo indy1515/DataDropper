@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,67 @@ using Windows.Devices.Geolocation;
 
 namespace FileDropper
 {
+    public class FileList
+    {
+        public FileList(JsonArray jsonArray, Geopoint point)
+        {
+            DataList = new List<FileData>();
+            Debug.WriteLine(jsonArray.Count);
+            foreach (JsonValue value in jsonArray)
+            {
+                try
+                {
+                    Debug.WriteLine("Foreach FileValue: " + value.Stringify());
+                    JsonObject jsonObject = value.GetObject();
+                    Debug.WriteLine("Foreach FileList: " + jsonObject.Stringify());
+                    DataList.Add(new FileData(jsonObject));
+                }
+                catch (ArgumentException e1)
+                {
+                    Debug.WriteLine("ArgumentException");
+                }
+            }
+            Debug.WriteLine("Start Refresh");
+            refreshNearestFile(point);
+        }
+
+        public FileList()
+            : this(new JsonArray(), new Geopoint(new BasicGeoposition
+                {
+                    Latitude = 0,
+                    Longitude = 0
+
+                }))
+        {
+            // TODO: Complete member initialization
+        }
+        public void refreshNearestFile(Geopoint point)
+        {
+            if (DataList != null)
+            {
+                Debug.WriteLine("Start Initiate");
+                FileData nearest = new FileData();
+                Debug.WriteLine("After Initiate");
+                double distance_temp = Double.PositiveInfinity;
+                foreach (FileData file in DataList)
+                {
+                    Debug.WriteLine("Loop FileData");
+                    double file_distance = CompassPage.getdistancebtw(file.Position, point);
+                    if (file_distance < distance_temp)
+                    {
+                        distance_temp = file_distance;
+                        nearest = file;
+                    }
+                }
+                Debug.WriteLine("Before Assign Nearest");
+                NearestFile = nearest;
+                Debug.WriteLine("After Assign Nearest");
+            }
+        }
+        public List<FileData> DataList { get; private set; }
+        public FileData NearestFile { get; private set; }
+        
+    }
     public class FileData
     {
 

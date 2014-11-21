@@ -26,23 +26,23 @@
         <!-- Title Panel -->
         <StackPanel Grid.Row="0" Margin="19,0,0,0">
             <StackPanel Orientation="Horizontal">
-                <Image Source="Assets/Compass/app_icon.png" Width="90" Height="90"></Image>
-                <TextBlock Text="Dropper" Style="{ThemeResource TitleTextBlockStyle}" Margin="10,0,0,0" VerticalAlignment="Center" FontSize="50" HorizontalAlignment="Left" LineStackingStrategy="BaselineToBaseline" TextTrimming="Clip" TextLineBounds="TrimToCapHeight"/>
+                <Image Source="Assets/Compass/app_icon.png" Width="80" Height="90"></Image>
+                <TextBlock Text="Dropper" Style="{ThemeResource TitleTextBlockStyle}" Margin="10,0,0,0" VerticalAlignment="Center" FontSize="45" HorizontalAlignment="Left" LineStackingStrategy="BaselineToBaseline" TextTrimming="Clip" TextLineBounds="TrimToCapHeight"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                
+                <TextBlock x:Name="filename" Text="Unknown" Margin="0,-6.5,0,0" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}" FontSize="30"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal">            
-                <TextBlock x:Name="type"  Text="File" Margin="0,-6.5,0,5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}" FontSize="30"/>
-                <TextBlock Text="by" Margin="15,-6.5,0,5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}" FontSize="30"/>
-                <TextBlock x:Name="user"  Text="Annonymous" Margin="15,-6.5,0,5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}" FontSize="30"/>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock x:Name="type"  Text="File" Margin="0,-6.5,0,0" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}" FontSize="24"/>
+                <TextBlock Text="by" Margin="15,-6.5,0,0" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}" FontSize="24"/>
+                <TextBlock x:Name="user"  Text="Annonymous" Margin="15,-6.5,0,0" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}" FontSize="24"/>
             </StackPanel>
         </StackPanel>
 
         <!--TODO: Content should be placed within the following grid-->
-        <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
-            
-            
+        <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,54">
+
+
             <Image x:Name="indicator" HorizontalAlignment="Center" Height="350"  VerticalAlignment="Center" Width="350" Source="Assets/Compass/Indicator.png" RenderTransformOrigin="0.5,0.5">
                 <Image.RenderTransform>
                     <RotateTransform x:Name="rotateTransform"/>
@@ -66,8 +66,9 @@
                 </StackPanel>
             </Grid>
         </Grid>
-       
+        <Button x:Name="pickBtn" Content="Pick File!" HorizontalAlignment="Center" Margin="34,364.5,37,0" Grid.Row="1" VerticalAlignment="Center" Width="329"/>
 
+    
 
     </Grid>
     <Page.BottomAppBar>
@@ -79,7 +80,7 @@
                     
                     Icon="List"
                     Label="Item List" HorizontalContentAlignment="Left"/>
-                
+
                 <AppBarButton
                     x:Name="upload"
                     x:Uid="ForwardAppBarButton"
