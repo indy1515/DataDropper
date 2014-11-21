@@ -329,14 +329,36 @@ namespace FileDropper
                 current_angle = angle;
 
                 updateIndicator();
-
-                
+                updateDistance();
+                updateUserFile();
                 //await Task.Delay(500);
 
                 
-                double displacement = getdistancebtw(myLocationIcon.Location, destination.Location);
-                distance.Text = (int)displacement + "";
+                
+                
             });
+        }
+        private void updateUserFile()
+        {
+            this.type.Text = current_file.FileName;
+            this.user.Text = current_file.DropBy;
+        }
+        private void updateDistance()
+        {
+            double displacement = getdistancebtw(myLocationIcon.Location, destination.Location);
+
+
+            if ((int)displacement >= 1000)
+            {
+                displacement = displacement / 1000;
+                distance.Text = displacement.ToString("#,##0.#");
+                this.unit.Text = "km.";
+            }
+            else
+            {
+                this.unit.Text = "m.";
+                distance.Text = displacement.ToString("#,##0");
+            }
         }
 
         async void updateIndicator()

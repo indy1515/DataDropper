@@ -25,8 +25,18 @@
 
         <!-- Title Panel -->
         <StackPanel Grid.Row="0" Margin="19,0,0,0">
-            <TextBlock Text="MY APPLICATION" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
-            <TextBlock Text="page title" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
+            <StackPanel Orientation="Horizontal">
+                <Image Source="Assets/Compass/app_icon.png" Width="90" Height="90"></Image>
+                <TextBlock Text="Dropper" Style="{ThemeResource TitleTextBlockStyle}" Margin="10,0,0,0" VerticalAlignment="Center" FontSize="50" HorizontalAlignment="Left" LineStackingStrategy="BaselineToBaseline" TextTrimming="Clip" TextLineBounds="TrimToCapHeight"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">            
+                <TextBlock x:Name="type"  Text="File" Margin="0,-6.5,0,5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}" FontSize="30"/>
+                <TextBlock Text="by" Margin="15,-6.5,0,5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}" FontSize="30"/>
+                <TextBlock x:Name="user"  Text="Annonymous" Margin="15,-6.5,0,5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}" FontSize="30"/>
+            </StackPanel>
         </StackPanel>
 
         <!--TODO: Content should be placed within the following grid-->
@@ -48,20 +58,17 @@
                     <RotateTransform x:Name="rotateTransform_file"/>
                 </Image.RenderTransform>
             </Image>
-            <Maps:MapControl x:Name="myMapControl" HorizontalAlignment="Left" Margin="6,-139,0,0" VerticalAlignment="Top" Height="134" Width="350" MapServiceToken="HJ1Q_ons4LFZJNL4KONPmg"/>
-            <StackPanel Margin="0,22,0,395" Orientation="Horizontal">
-                <TextBlock HorizontalAlignment="Left"  TextWrapping="Wrap" Text="Distance: " VerticalAlignment="Top" FontSize="20" FontWeight="Bold" Margin="0,0,10,0" />
-                <TextBlock x:Name="distance" HorizontalAlignment="Left" TextWrapping="Wrap" Text="-" VerticalAlignment="Top" FontSize="20" FontWeight="Bold" Margin="0,0,10,0">
-                    <TextBlock.RenderTransform>
-                        <CompositeTransform />
-                    </TextBlock.RenderTransform>
-                </TextBlock>
-                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="m" VerticalAlignment="Top" FontSize="20" FontWeight="Bold"/>
-            </StackPanel>
-            
+            <Maps:MapControl x:Name="myMapControl" HorizontalAlignment="Left" Margin="6,-139,0,0" VerticalAlignment="Top" Height="134" Width="350" MapServiceToken="HJ1Q_ons4LFZJNL4KONPmg" Opacity="0"/>
+            <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock x:Name="distance" Text="-" Margin="10,-6.5,0,5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}" FontSize="35"/>
+                    <TextBlock x:Name="unit" Text="m." Margin="10,-6.5,0,5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}" FontSize="35"/>
+                </StackPanel>
+            </Grid>
         </Grid>
-        
-        
+       
+
+
     </Grid>
     <Page.BottomAppBar>
         <CommandBar>

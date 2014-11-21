@@ -130,6 +130,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\compass.png" />
+    <Content Include="Assets\Compass\app_icon.png" />
     <Content Include="Assets\Compass\Indicator.png" />
     <Content Include="Assets\Compass\Outer_Ring.png" />
     <Content Include="Assets\file.png" />
