@@ -569,5 +569,10 @@ namespace FileDropper
 
         }
 
+        private void toTakePhotoPage(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(TakePhoto)); 
+        }
+
     }
 }

@@ -7,14 +7,14 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-    <Page.BottomAppBar >
+    <!--  <Page.BottomAppBar >
         <CommandBar>
-            <AppBarButton x:Name="toCompassButton" Icon="MapPin" Label="Compass" Click="toCompass_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,70,0" />
-            <AppBarButton x:Name="InitCameraButton" Icon="Camera" Label="Camera" Click="InitCamera_Click" HorizontalAlignment="Center" VerticalAlignment="Center" />
-            <AppBarButton x:Name="TakePhotoButton" Icon="Target" Label="Take Photo" Click="TakePhoto_Click" Visibility="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <AppBarButton x:Name="toListFileButton" Icon="List" Label="File List" Click="toListFile_Click" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="70,0,0,0" />
-        </CommandBar>
-    </Page.BottomAppBar>
+           <AppBarButton x:Name="toCompassButton" Icon="MapPin" Label="Compass" Click="toCompass_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,70,0" /> 
+           <AppBarButton x:Name="InitCameraButton" Icon="Camera" Label="Camera" Click="InitCamera_Click" HorizontalAlignment="Center" VerticalAlignment="Center" />
+           <AppBarButton x:Name="TakePhotoButton" Icon="Target" Label="Take Photo" Click="TakePhoto_Click" Visibility="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+           <AppBarButton x:Name="toListFileButton" Icon="List" Label="File List" Click="toListFile_Click" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="70,0,0,0" />
+        </CommandBar> 
+    </Page.BottomAppBar> !-->
 
     <Grid x:Name="LayoutRoot">
 
@@ -38,16 +38,41 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"></RowDefinition>
                 </Grid.RowDefinitions>
-                <CaptureElement x:Name="CapturePreview" Grid.Row="0"/>
-                <Image x:Name="CapturedImage" Grid.Row="0" Visibility="Collapsed"/>
+                <CaptureElement x:Name="CapturePreview" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stretch="UniformToFill"/>
+                <Image x:Name="CapturedImage" Grid.Row="0" Visibility="Collapsed" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="-50"/>
                 <Button BorderBrush="Transparent" x:Name="videocapturebtn" HorizontalAlignment="Left" VerticalAlignment="Top" Click="toVideoCapture">
                     <StackPanel Height="50" Width="50">
-                        <Image Source="ms-appx:///Assets/Video.png" Stretch="Fill"/>
+                        <Image Source="ms-appx:///Assets/Camera/Video.png" Stretch="Fill"/>
                     </StackPanel>
                 </Button>
                 <Button BorderBrush="Transparent" x:Name="switchcamerabtn" HorizontalAlignment="Right" VerticalAlignment="Top" Click="switchCamera">
                     <StackPanel Height="50" Width="50">
-                        <Image Source="ms-appx:///Assets/SwitchVC.png" Stretch="Fill"/>
+                        <Image Source="ms-appx:///Assets/Camera/SwitchVC.png" Stretch="Fill"/>
+                    </StackPanel>
+                </Button>
+                <Button BorderBrush="Transparent" x:Name="toCompassButton" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="toCompass_Click" Margin="0,0,0,20">
+                    <StackPanel Height="50" Width="50">
+                        <Image Source="ms-appx:///Assets/Camera/Compass.png" Stretch="Fill"/>
+                    </StackPanel>
+                </Button>
+                <Button BorderBrush="Transparent" x:Name="TakePhotoButton" HorizontalAlignment="Center" VerticalAlignment="Bottom" Click="TakePhoto_Click" Margin="0,0,0,10" >
+                    <StackPanel Height="70" Width="70">
+                        <Image x:Name="CameraIcon" Source="ms-appx:///Assets/Camera/Capture.png" Stretch="Fill" PointerPressed="CameraPress" PointerReleased="CameraRelease"/>
+                    </StackPanel>
+                </Button>
+                <Button BorderBrush="Transparent" x:Name="toListFileButton" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="toListFile_Click" Margin="0,0,0,20">
+                    <StackPanel Height="50" Width="50">
+                        <Image Source="ms-appx:///Assets/Camera/ListBar.png" Stretch="Fill"/>
+                    </StackPanel>
+                </Button>
+                <Button BorderBrush="Transparent" x:Name="SaveButton" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="Save_Click" Margin="0,0,0,5" Visibility="Collapsed">
+                    <StackPanel Height="40" Width="40">
+                        <Image Source="ms-appx:///Assets/Camera/check.png" Stretch="Fill"/>
+                    </StackPanel>
+                </Button>
+                <Button BorderBrush="Transparent" x:Name="CancelButton" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="Cancel_Click" Margin="0,0,0,10" Visibility="Collapsed">
+                    <StackPanel Height="30" Width="30">
+                        <Image Source="ms-appx:///Assets/Camera/clear.png" Stretch="Fill"/>
                     </StackPanel>
                 </Button>
             </Grid>

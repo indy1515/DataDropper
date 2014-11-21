@@ -96,6 +96,7 @@
                     x:Name="camera"
                     x:Uid="ForwardAppBarButton"
                     Icon="Camera"
+                    Click="toTakePhotoPage"
                     Label="Camera" HorizontalContentAlignment="Right"/>
             </CommandBar.PrimaryCommands>
             <CommandBar.SecondaryCommands>
