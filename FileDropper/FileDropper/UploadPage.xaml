@@ -1,4 +1,4 @@
-﻿<ContentDialog xmlns:Maps="using:Windows.UI.Xaml.Controls.Maps" 
+﻿<Page xmlns:Maps="using:Windows.UI.Xaml.Controls.Maps" 
     x:Class="FileDropper.UploadPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -6,30 +6,71 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Title="Upload"
-    PrimaryButtonText="Submit"  
-    SecondaryButtonText="Cancel"
-    PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
-    SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-        <Maps:MapControl x:Name="myMapControl" HorizontalAlignment="Center"  VerticalAlignment="Center" Height="134" MapServiceToken="HJ1Q_ons4LFZJNL4KONPmg" Margin="0,0,0,11" Width="360" MinWidth="340" />
-        <TextBox Name="display_name" Header="Display Name"/>
-        <TextBox Name="your_name" Header="Your Name"/>
-        <TextBox Name="file_name" Header="Filename"/>
-        <TextBlock Text="Upload File" ></TextBlock>
-        <StackPanel Orientation="Horizontal">
-            <Button Name="upload_file" Content="Choose File"/>
-            <TextBlock x:Name="upload_filename" Text="filename.txt" VerticalAlignment="Center" Margin="15,0,0,0"></TextBlock>
+    <Grid x:Name="LayoutRoot">
+
+        <Grid.ChildrenTransitions>
+            <TransitionCollection>
+                <EntranceThemeTransition/>
+            </TransitionCollection>
+        </Grid.ChildrenTransitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Title Panel -->
+        <StackPanel Grid.Row="0" Margin="19,0,0,0">
+            <TextBlock Text="Upload" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
+            <!--<TextBlock Text="page title" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>-->
         </StackPanel>
 
+        <!--TODO: Content should be placed within the following grid-->
+        <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
+            <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                <Maps:MapControl x:Name="myMapControl" HorizontalAlignment="Center"  VerticalAlignment="Center" Height="134" MapServiceToken="HJ1Q_ons4LFZJNL4KONPmg" Margin="0,0,0,11" Width="358" MinWidth="340" />
+                <TextBox Name="display_name" Header="Display Name"/>
+                <TextBox Name="your_name" Header="Your Name"/>
+                <TextBox Name="file_name" Header="Filename"/>
+                <TextBlock Text="Upload File" ></TextBlock>
+                <StackPanel Orientation="Horizontal">
+                    <Button Name="upload_file" Content="Choose File"/>
+                    <TextBlock x:Name="upload_filename" Text="filename.txt" VerticalAlignment="Center" Margin="15,0,0,0"></TextBlock>
+                </StackPanel>
 
-        <!-- Content body --><!--
+                <!-- Content body -->
+                <!--
         <TextBlock Name="body" Style="{StaticResource MessageDialogContentStyle}" TextWrapping="Wrap">
             <TextBlock.Text>
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit,
                     sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
             </TextBlock.Text>
         </TextBlock>-->
-    </StackPanel>
-</ContentDialog>
+            </StackPanel>
+        </Grid>
+    </Grid>
+    <Page.BottomAppBar>
+        <CommandBar>
+            <CommandBar.PrimaryCommands>
+                <AppBarButton
+                    x:Name="submitBtn"
+                    x:Uid="ForwardAppBarButton"
+                    Icon="Accept"
+                    Label="Submit" HorizontalContentAlignment="Left"/>
+
+                <AppBarButton
+                    x:Name="cancelBtn"
+                    x:Uid="ForwardAppBarButton"
+                    Icon="Cancel"
+                    Label="Cancel" HorizontalContentAlignment="Right"/>
+            
+                
+            </CommandBar.PrimaryCommands>
+            <CommandBar.SecondaryCommands>
+
+            </CommandBar.SecondaryCommands>
+        </CommandBar>
+    </Page.BottomAppBar>
+</Page>

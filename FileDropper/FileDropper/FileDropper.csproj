@@ -96,6 +96,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UploadPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="VideoCapturePage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -126,6 +130,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TakePhoto.xaml.cs">
       <DependentUpon>TakePhoto.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UploadPage.xaml.cs">
+      <DependentUpon>UploadPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="VideoCapturePage.xaml.cs" />
     <Compile Include="WebClient.cs" />

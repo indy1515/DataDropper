@@ -633,7 +633,7 @@ namespace FileDropper
 
         private void toUploadPage(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(UploadPage))
+            Frame.Navigate(typeof(UploadPage));
         }
 
         private void toTakePhotoPage(object sender, RoutedEventArgs e)

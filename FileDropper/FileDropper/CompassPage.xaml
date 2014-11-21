@@ -85,6 +85,7 @@
                     x:Name="upload"
                     x:Uid="ForwardAppBarButton"
                     Icon="Upload"
+                    Click="toUploadPage"
                     Label="Upload" HorizontalContentAlignment="Right"/>
                 <AppBarButton
                     x:Name="scanBtn"
