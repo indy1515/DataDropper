@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.Data.Json;
@@ -408,7 +410,7 @@ namespace FileDropper
                 current_angle = angle;
 
                 updateIndicator();
-
+                //updateFilePosition();
                 updateDistance();
                 updateUserFile();
                 //await Task.Delay(500);
@@ -435,7 +437,7 @@ namespace FileDropper
         {
             Storyboard board = new Storyboard();
             var timeline = new DoubleAnimationUsingKeyFrames();
-            Storyboard.SetTarget(timeline, rotateTransform);
+            Storyboard.SetTarget(timeline, rotateTransform_file);
             Storyboard.SetTargetProperty(timeline, "Angle");
             //Debug.WriteLine("Current North: " + current_north + " Current Angle: " + current_angle);
             double indicator_angle = (360 + current_north + current_angle) % 360;
@@ -592,6 +594,48 @@ namespace FileDropper
 
 
         }
+        public async Task<string> PostData(String url,FileData data,StorageFile file)
+        {
+            HttpClient httpClient = new HttpClient();
+            MultipartFormDataContent form = new MultipartFormDataContent();
+
+            form.Add(new StringContent(data.Name), "name");
+            form.Add(new StringContent(data.Position.Position.Latitude+""), "x");
+            form.Add(new StringContent(data.Position.Position.Longitude+""), "y");
+            form.Add(new StringContent(data.DropBy), "dropby");
+            form.Add(new StringContent("ice"), "password");
+            //  form.Add(new FormUrlEncodedContent(data), "profile_pic");
+            byte[] imagebytearraystring = await GetBytesAsync(file);
+            form.Add(new ByteArrayContent(imagebytearraystring, 0, imagebytearraystring.Count()), "file", file.Name);
+            HttpResponseMessage response = await httpClient.PostAsync("PostUrl", form);
+
+            response.EnsureSuccessStatusCode();
+            httpClient.Dispose();
+            string sd = response.Content.ReadAsStringAsync().Result;
+            return sd;
+        }
+
+        private async Task<byte[]> GetBytesAsync(StorageFile file)
+        {
+            byte[] fileBytes = null;
+            using (var stream = await file.OpenReadAsync())
+            {
+                fileBytes = new byte[stream.Size];
+                using (var reader = new DataReader(stream))
+                {
+                    await reader.LoadAsync((uint)stream.Size);
+                    reader.ReadBytes(fileBytes);
+                }
+            }
+
+            return fileBytes;
+        }
+
+        private void toUploadPage(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(UploadPage))
+        }
+
         private void toTakePhotoPage(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(TakePhoto));
