@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.Data.Json;
 using Windows.Data.Xml.Dom;
@@ -14,6 +15,7 @@ using Windows.Devices.Sensors;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Graphics.Display;
+using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.UI;
 using Windows.UI.Core;
@@ -149,7 +151,7 @@ namespace FileDropper
             //FileData recieveFile = new FileData("MyFile", "13.8724809", "100.5830644", "Gain", "test.png");
 
             Debug.WriteLine("Did Load");
-            this.pickBtn.Click += (o, eb) =>
+            this.pickBtn.Click += async (o, eb) =>
             {
                 double displacement = getdistancebtw(myLocationIcon.Location, destination.Location);
                 if (displacement > 5)
@@ -160,6 +162,7 @@ namespace FileDropper
                 {
                     
                     ShowToastNotification("You have obtain " + current_file.NearestFile.FileName + " by " + current_file.NearestFile.DropBy);
+                    await loadFile("http://gain.osk130.com/adprog/files/" + current_file.NearestFile.FileName, current_file.NearestFile.FileType);
                 }
             
             };
@@ -508,7 +511,40 @@ namespace FileDropper
 
         #endregion
 
-        
+        public async Task loadFile(string url, String type)
+        {
+            //MessageDialog msgbox = new MessageDialog("Message Box is displayed");
+            //Calling the Show method of MessageDialog class  
+            //which will show the MessageBox  
+            //await msgbox.ShowAsync();  
+            Uri dataUri = new Uri(url);
+
+            Debug.WriteLine(dataUri);
+            HttpClient client = new HttpClient();
+            Stream stream_file = await client.GetStreamAsync(dataUri);
+
+            //string url2 = await client.GetStringAsync(dataUri);
+            CancellationTokenSource cts = new CancellationTokenSource();
+            CancellationToken token = cts.Token;
+            await SaveStreamToFile(stream_file, current_file.NearestFile.FileName, token);
+           
+        }
+        public async Task SaveStreamToFile(Stream streamToSave, string fileName, CancellationToken cancelToken)
+        {
+            StorageFile file = await ApplicationData.Current.TemporaryFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
+            using (Stream fileStram = await file.OpenStreamForWriteAsync())
+            {
+                const int BUFFER_SIZE = 1024;
+                byte[] buf = new byte[BUFFER_SIZE];
+
+                int bytesread = 0;
+                while ((bytesread = await streamToSave.ReadAsync(buf, 0, BUFFER_SIZE)) > 0)
+                {
+                    await fileStram.WriteAsync(buf, 0, bytesread);
+                    cancelToken.ThrowIfCancellationRequested();
+                }
+            }
+        }
 
         public async Task loadData(string url,Geopoint point)
         {

@@ -122,6 +122,7 @@
     <Compile Include="TakePhoto.xaml.cs">
       <DependentUpon>TakePhoto.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WebClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

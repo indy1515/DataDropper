@@ -73,9 +73,9 @@ namespace FileDropper
     public class FileData
     {
 
-        private readonly string PHOTO = "image";
-        private readonly string VIDEO = "video";
-        private readonly string FILE = "file";
+        public static readonly string PHOTO = "image";
+        public static readonly string VIDEO = "video";
+        public static readonly string FILE = "file";
         public FileData()
         {
 
@@ -107,7 +107,7 @@ namespace FileDropper
         {
             get
             {
-                string type = this.FILE;
+                string type = FileData.FILE;
                 string typeName = FileName.Substring(FileName.IndexOf('.') + 1);
                 switch (typeName)
                 {
@@ -117,7 +117,7 @@ namespace FileDropper
                     case "png": 
                     case "jpg":
                     case "jpeg":
-                        type = this.PHOTO; break;
+                        type = FileData.PHOTO; break;
                     case "mp4":
                     case "wav":
                     case "avi":
@@ -125,10 +125,10 @@ namespace FileDropper
                     case "ogg":
                     case "wmv":
                     case "mp3":
-                        type = this.VIDEO; break;
+                        type = FileData.VIDEO; break;
                     case "docx": 
                     default: 
-                        type = this.FILE; break;
+                        type = FileData.FILE; break;
                 }
 
                 return type;
