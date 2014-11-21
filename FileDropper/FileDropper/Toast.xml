@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<toast>
+  <visual>
+    <binding template="ToastImageAndText01">
+      <image id="img" src=""/>
+      <text id="txt"></text>
+    </binding>
+  </visual>
+</toast>

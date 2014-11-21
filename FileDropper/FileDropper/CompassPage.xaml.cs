@@ -151,9 +151,18 @@ namespace FileDropper
             Debug.WriteLine("Did Load");
             this.pickBtn.Click += (o, eb) =>
             {
-                ShowToastNotification("Test Title");
+                double displacement = getdistancebtw(myLocationIcon.Location, destination.Location);
+                if (displacement > 5)
+                {
+                    ShowToastNotification("Too far away!");
+                }
+                else
+                {
+                    
+                    ShowToastNotification("You have obtain " + current_file.NearestFile.FileName + " by " + current_file.NearestFile.DropBy);
+                }
+            
             };
-
             geolocator = new Geolocator();
             geolocator.DesiredAccuracy = PositionAccuracy.High;
             geolocator.MovementThreshold = 1; // The units are meters.
@@ -237,6 +246,25 @@ namespace FileDropper
             geolocator.StatusChanged += geolocator_StatusChanged;
             geolocator.PositionChanged += geolocator_PositionChanged;
         }
+
+        private void simpleToast_Click(object sender, RoutedEventArgs e)  
+        {  
+            ToastTemplateType toastType = ToastTemplateType.ToastText02;  
+  
+            XmlDocument toastXml = ToastNotificationManager.GetTemplateContent(toastType);  
+  
+            XmlNodeList toastTextElement = toastXml.GetElementsByTagName("text");  
+            toastTextElement[0].AppendChild(toastXml.CreateTextNode("Hello C# Corner"));  
+            toastTextElement[1].AppendChild(toastXml.CreateTextNode("I am poping you from a Winmdows Phone App"));  
+  
+            IXmlNode toastNode= toastXml.SelectSingleNode("/toast");  
+            ((XmlElement)toastNode).SetAttribute("duration","long");  
+  
+            ToastNotification toast = new ToastNotification(toastXml);  
+            ToastNotificationManager.CreateToastNotifier().Show(toast);  
+  
+  
+        }  
         private void ShowToastNotification(String message)
         {
             ToastTemplateType toastTemplate = ToastTemplateType.ToastImageAndText01;
@@ -249,7 +277,7 @@ namespace FileDropper
             // Set image
             // Images must be less than 200 KB in size and smaller than 1024 x 1024 pixels.
             XmlNodeList toastImageAttributes = toastXml.GetElementsByTagName("image");
-            ((XmlElement)toastImageAttributes[0]).SetAttribute("src", "ms-appx:///Images/logo-80px-80px.png");
+            ((XmlElement)toastImageAttributes[0]).SetAttribute("src", "ms-appx:///Assets/Compass/app_icon.png");
             ((XmlElement)toastImageAttributes[0]).SetAttribute("alt", "logo");
 
             // toast duration
