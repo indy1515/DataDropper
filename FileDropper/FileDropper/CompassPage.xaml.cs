@@ -594,42 +594,7 @@ namespace FileDropper
 
 
         }
-        public async Task<string> PostData(String url,FileData data,StorageFile file)
-        {
-            HttpClient httpClient = new HttpClient();
-            MultipartFormDataContent form = new MultipartFormDataContent();
-
-            form.Add(new StringContent(data.Name), "name");
-            form.Add(new StringContent(data.Position.Position.Latitude+""), "x");
-            form.Add(new StringContent(data.Position.Position.Longitude+""), "y");
-            form.Add(new StringContent(data.DropBy), "dropby");
-            form.Add(new StringContent("ice"), "password");
-            //  form.Add(new FormUrlEncodedContent(data), "profile_pic");
-            byte[] imagebytearraystring = await GetBytesAsync(file);
-            form.Add(new ByteArrayContent(imagebytearraystring, 0, imagebytearraystring.Count()), "file", file.Name);
-            HttpResponseMessage response = await httpClient.PostAsync("PostUrl", form);
-
-            response.EnsureSuccessStatusCode();
-            httpClient.Dispose();
-            string sd = response.Content.ReadAsStringAsync().Result;
-            return sd;
-        }
-
-        private async Task<byte[]> GetBytesAsync(StorageFile file)
-        {
-            byte[] fileBytes = null;
-            using (var stream = await file.OpenReadAsync())
-            {
-                fileBytes = new byte[stream.Size];
-                using (var reader = new DataReader(stream))
-                {
-                    await reader.LoadAsync((uint)stream.Size);
-                    reader.ReadBytes(fileBytes);
-                }
-            }
-
-            return fileBytes;
-        }
+        
 
         private void toUploadPage(object sender, RoutedEventArgs e)
         {
