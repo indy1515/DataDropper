@@ -124,6 +124,7 @@
     <Compile Include="ItemPage.xaml.cs">
       <DependentUpon>ItemPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="LocationFile.cs" />
     <Compile Include="PivotPage.xaml.cs">
       <DependentUpon>PivotPage.xaml</DependentUpon>
     </Compile>
@@ -156,6 +157,7 @@
     <Content Include="Assets\Compass\Indicator.png" />
     <Content Include="Assets\Compass\Outer_Ring.png" />
     <Content Include="Assets\file.png" />
+    <Content Include="Assets\pinlocation.png" />
     <Content Include="Assets\image.png" />
     <Content Include="Assets\Logo.scale-240.png" />
     <Content Include="Assets\mylocation.png" />

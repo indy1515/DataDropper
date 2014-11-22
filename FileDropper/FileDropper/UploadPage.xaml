@@ -33,13 +33,13 @@
                 <Maps:MapControl x:Name="myMapControl" HorizontalAlignment="Center"  VerticalAlignment="Center" Height="134" MapServiceToken="HJ1Q_ons4LFZJNL4KONPmg" Margin="0,0,0,11" Width="358" MinWidth="340" />
                 <TextBox Name="display_name" Header="Display Name"/>
                 <TextBox Name="your_name" Header="Your Name"/>
-                <TextBox Name="file_name" Header="Filename"/>
+                <TextBox Name="file_name" TextChanged="FileTextListener" Header="Filename"/>
                 <TextBlock Text="Upload File" ></TextBlock>
                 <StackPanel Orientation="Horizontal">
-                    <Button Name="upload_file" Content="Choose File"/>
-                    <TextBlock x:Name="upload_filename" Text="filename.txt" VerticalAlignment="Center" Margin="15,0,0,0"></TextBlock>
+                    <Button Name="upload_fileBtn" Click="ClickBrowseButton" Content="Choose File"/>
+                    <TextBlock x:Name="upload_filename" Text="No File Upload" VerticalAlignment="Center" Margin="15,0,0,0"></TextBlock>
                 </StackPanel>
-
+                <ProgressRing x:Name="progressRing" IsActive="False"/>
                 <!-- Content body -->
                 <!--
         <TextBlock Name="body" Style="{StaticResource MessageDialogContentStyle}" TextWrapping="Wrap">
@@ -58,8 +58,9 @@
                     x:Name="submitBtn"
                     x:Uid="ForwardAppBarButton"
                     Icon="Accept"
+                    Click="ClickSubmitButton"
                     Label="Submit" HorizontalContentAlignment="Left"/>
-
+                
                 <AppBarButton
                     x:Name="cancelBtn"
                     x:Uid="ForwardAppBarButton"

@@ -154,6 +154,11 @@ namespace FileDropper
             //FileData recieveFile = new FileData("MyFile", "13.8724809", "100.5830644", "Gain", "test.png");
 
             Debug.WriteLine("Did Load");
+            initiateCompass();
+            initiateButton();
+        }
+        private void initiateButton()
+        {
             this.pickBtn.Click += async (o, eb) =>
             {
                 double displacement = getdistancebtw(myLocationIcon.Location, destination.Location);
@@ -169,6 +174,10 @@ namespace FileDropper
                 }
 
             };
+        }
+        private async void initiateCompass()
+        {
+           
             geolocator = new Geolocator();
             geolocator.DesiredAccuracy = PositionAccuracy.High;
             geolocator.MovementThreshold = 1; // The units are meters.
@@ -184,10 +193,23 @@ namespace FileDropper
                     timeout: TimeSpan.FromSeconds(10));
                 string mylat = myLocation.Coordinate.Point.Position.Latitude + "";
                 string mylng = myLocation.Coordinate.Point.Position.Longitude + "";
-                string radius = "100000000000";
+                string radius = "10000";
                 string link = "http://gain.osk130.com/adprog/getdata.php?lat=" + mylat + "&lon=" + mylng + "&distance=" + radius;
                 Debug.WriteLine(link);
-                await loadData(link, myLocation.Coordinate.Point);
+                while (true)
+                {
+                    try
+                    {
+                        await loadData(link, myLocation.Coordinate.Point);
+                        break;
+                    }
+                    catch (HttpRequestException e3)
+                    {
+                        ShowToastNotification("No Internet Connection...Retrying...");
+                        
+                    }
+                    await Task.Delay(10000);
+                }
 
             }
             catch (UnauthorizedAccessException ex)
@@ -252,7 +274,6 @@ namespace FileDropper
             geolocator.StatusChanged += geolocator_StatusChanged;
             geolocator.PositionChanged += geolocator_PositionChanged;
         }
-
         private void simpleToast_Click(object sender, RoutedEventArgs e)
         {
             ToastTemplateType toastType = ToastTemplateType.ToastText02;
@@ -598,7 +619,8 @@ namespace FileDropper
 
         private void toUploadPage(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(UploadPage));
+            LocationFile locafile = new LocationFile(null, myLocation);
+            Frame.Navigate(typeof(UploadPage),locafile);
         }
 
         private void toTakePhotoPage(object sender, RoutedEventArgs e)

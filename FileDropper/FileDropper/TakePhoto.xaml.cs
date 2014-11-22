@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Devices.Enumeration;
+using Windows.Devices.Geolocation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Media.Capture;
@@ -31,6 +32,7 @@ namespace FileDropper
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         private MediaCapture captureManager = null;
+        private StorageFile file;
         int cameradevice = 1;
         int phototaken = 0;
         public TakePhoto()
@@ -169,7 +171,7 @@ namespace FileDropper
                 //CreationCollisionOption.GenerateUniqueName);
 
                 StorageFolder folder = KnownFolders.CameraRoll;
-                StorageFile file = await folder.CreateFileAsync("temp.jpg", CreationCollisionOption.GenerateUniqueName);
+                file = await folder.CreateFileAsync("Unnamed.jpg", CreationCollisionOption.GenerateUniqueName);
                 // take photo
                 await captureManager.CapturePhotoToStorageFileAsync(imgFormat, file);
 
@@ -280,10 +282,23 @@ namespace FileDropper
             phototaken = 0;
         }
 
-        private void Save_Click(object sender, RoutedEventArgs e)
+        private async void Save_Click(object sender, RoutedEventArgs e)
         {
             phototaken = 0;
+            Geolocator geolocator = new Geolocator();
+            geolocator.DesiredAccuracy = PositionAccuracy.High;
+            geolocator.MovementThreshold = 1; // The units are meters.
+
+            Geoposition myLocation = await geolocator.GetGeopositionAsync(
+                    maximumAge: TimeSpan.FromMinutes(5),
+                    timeout: TimeSpan.FromSeconds(10));
+
+            LocationFile locafile = new LocationFile(file, myLocation);
+            Frame.Navigate(typeof(UploadPage), locafile);
+            //StorageFile file = await StorageFile.CreateStreamedFileAsync()
+            //CapturedImage.Source
             //TODO Windows.Storage.Streams.IRandomAccessStream stream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read);
+            
         }
 
     }
