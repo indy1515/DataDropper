@@ -1,6 +1,7 @@
 ﻿using FileDropper.Common;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -33,6 +34,8 @@ namespace FileDropper
         private MediaCapture captureManager = null;
         int cameradevice = 1;
         int phototaken = 0;
+        private StorageFile videoFile;
+        MediaEncodingProfile videoEncodingProperties;
         public TakePhoto()
         {
             this.InitializeComponent();
@@ -115,12 +118,15 @@ namespace FileDropper
                 });
                 CapturePreview.Source = captureManager;
                 captureManager.SetPreviewRotation(VideoRotation.Clockwise90Degrees);
+
                 await captureManager.StartPreviewAsync();
             }
             //InitCameraButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             TakePhotoButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
             CapturedImage.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             CapturePreview.Visibility = Windows.UI.Xaml.Visibility.Visible;
+
+            videoFile = null;
         }
 
         protected async override void OnNavigatedFrom(NavigationEventArgs e)
@@ -210,7 +216,7 @@ namespace FileDropper
 
         private void toCompass_Click(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(CompassPage)); 
+            Frame.Navigate(typeof(CompassPage));
         }
 
         private async void switchCamera(object sender, RoutedEventArgs e)
@@ -242,7 +248,21 @@ namespace FileDropper
 
         private void toVideoCapture(object sender, RoutedEventArgs e)
         {
-            // Frame.Navigate(typeof(VideoCapturePage)); 
+
+            if (TakePhotoButton.Visibility == Visibility.Visible)
+            {
+                changevideo.Source = new BitmapImage(new Uri(@"ms-appx:///Assets/Camera/cam.jpeg", UriKind.RelativeOrAbsolute));
+                //change video image
+                TakePhotoButton.Visibility = Visibility.Collapsed;
+                TakeVideoButton.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                changevideo.Source = new BitmapImage(new Uri(@"ms-appx:///Assets/Camera/Video.png", UriKind.RelativeOrAbsolute));
+                //change video image
+                TakePhotoButton.Visibility = Visibility.Visible;
+                TakeVideoButton.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void CameraPress(object sender, PointerRoutedEventArgs e)
@@ -267,23 +287,101 @@ namespace FileDropper
                 await captureManager.StartPreviewAsync();
             }
 
-            //InitCameraButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            TakePhotoButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            toListFileButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            toCompassButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            CapturedImage.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            CapturePreview.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            switchcamerabtn.Visibility = Visibility.Visible;
-            videocapturebtn.Visibility = Visibility.Visible;
-            SaveButton.Visibility = Visibility.Collapsed;
-            CancelButton.Visibility = Visibility.Collapsed;
-            phototaken = 0;
+
+            if (videoFile == null)
+            {
+                //InitCameraButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                TakePhotoButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                toListFileButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                toCompassButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                CapturedImage.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                CapturePreview.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                switchcamerabtn.Visibility = Visibility.Visible;
+                videocapturebtn.Visibility = Visibility.Visible;
+                SaveButton.Visibility = Visibility.Collapsed;
+                CancelButton.Visibility = Visibility.Collapsed;
+                phototaken = 0;
+
+            }
+
+            else
+            {
+                TakeVideoButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                toListFileButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                toCompassButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                CapturedImage.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                CapturePreview.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                switchcamerabtn.Visibility = Visibility.Visible;
+                videocapturebtn.Visibility = Visibility.Visible;
+                SaveButton.Visibility = Visibility.Collapsed;
+                CancelButton.Visibility = Visibility.Collapsed;
+                phototaken = 0;
+
+                await captureManager.StopPreviewAsync();
+                VideoPreview.Source = null;
+                captureManager.Dispose();
+                captureManager = null;
+
+
+                captureManager = new MediaCapture();
+                //await captureManager.InitializeAsync();
+                var devices = await DeviceInformation.FindAllAsync(DeviceClass.VideoCapture);
+                await captureManager.InitializeAsync(new MediaCaptureInitializationSettings
+                {
+                    VideoDeviceId = devices[1].Id
+                });
+                CapturePreview.Source = captureManager;
+                captureManager.SetPreviewRotation(VideoRotation.Clockwise90Degrees);
+                await captureManager.StartPreviewAsync();
+
+                videoFile = null;
+            }
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
             phototaken = 0;
             //TODO Windows.Storage.Streams.IRandomAccessStream stream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read);
+        }
+
+        private async void TakeVideo_Click(object sender, RoutedEventArgs e)
+        {
+
+            if (videoFile == null)
+            {
+                if (cameradevice == 1)
+                {
+                    captureManager.SetRecordRotation(VideoRotation.Clockwise90Degrees);
+                }
+
+                else { captureManager.SetRecordRotation(VideoRotation.Clockwise270Degrees); }
+                var videoStorageFile = await KnownFolders.VideosLibrary.CreateFileAsync("video.mp4", CreationCollisionOption.GenerateUniqueName);
+                videoEncodingProperties = MediaEncodingProfile.CreateMp4(VideoEncodingQuality.Vga);
+                await captureManager.StartRecordToStorageFileAsync(videoEncodingProperties, videoStorageFile);
+                videoFile = videoStorageFile;
+            }
+
+            else
+            {
+                await captureManager.StopRecordAsync();
+
+                VideoPreview.SetSource(await videoFile.OpenReadAsync(), videoFile.ContentType);
+                Debug.WriteLine(videoFile.Path);
+
+
+
+                TakeVideoButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                toListFileButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                toCompassButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                videocapturebtn.Visibility = Visibility.Collapsed;
+                //CapturePreview.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                //CapturedVideo.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                switchcamerabtn.Visibility = Visibility.Collapsed;
+                TakeVideoButton.Visibility = Visibility.Collapsed;
+                SaveButton.Visibility = Visibility.Visible;
+                CancelButton.Visibility = Visibility.Visible;
+
+            }
         }
 
     }
