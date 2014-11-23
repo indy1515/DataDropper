@@ -5,6 +5,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
+using Windows.Data.Xml.Dom;
 using Windows.Devices.Enumeration;
 using Windows.Devices.Geolocation;
 using Windows.Foundation;
@@ -12,6 +14,7 @@ using Windows.Foundation.Collections;
 using Windows.Media.Capture;
 using Windows.Media.MediaProperties;
 using Windows.Storage;
+using Windows.UI.Notifications;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -163,7 +166,41 @@ namespace FileDropper
             SaveButton.Visibility = Visibility.Collapsed;
             CancelButton.Visibility = Visibility.Collapsed;
         }*/
+        private async void ClickComingSoon(object sender, RoutedEventArgs e)
+        {
+            ShowToastNotification("Coming Soon!");
+            await Task.Delay(2000);
+        }
+        private void ShowToastNotification(String message)
+        {
+            ToastTemplateType toastTemplate = ToastTemplateType.ToastImageAndText01;
+            XmlDocument toastXml = ToastNotificationManager.GetTemplateContent(toastTemplate);
 
+            // Set Text
+            XmlNodeList toastTextElements = toastXml.GetElementsByTagName("text");
+            toastTextElements[0].AppendChild(toastXml.CreateTextNode(message));
+
+            // Set image
+            // Images must be less than 200 KB in size and smaller than 1024 x 1024 pixels.
+            XmlNodeList toastImageAttributes = toastXml.GetElementsByTagName("image");
+            ((XmlElement)toastImageAttributes[0]).SetAttribute("src", "ms-appx:///Assets/Compass/app_icon.png");
+            ((XmlElement)toastImageAttributes[0]).SetAttribute("alt", "logo");
+
+            // toast duration
+            IXmlNode toastNode = toastXml.SelectSingleNode("/toast");
+            ((XmlElement)toastNode).SetAttribute("duration", "short");
+
+            // toast navigation
+            var toastNavigationUriString = "#/MainPage.xaml?param1=12345";
+            var toastElement = ((XmlElement)toastXml.SelectSingleNode("/toast"));
+            toastElement.SetAttribute("launch", toastNavigationUriString);
+
+            // Create the toast notification based on the XML content you've specified.
+            ToastNotification toast = new ToastNotification(toastXml);
+
+            // Send your toast notification.
+            ToastNotificationManager.CreateToastNotifier().Show(toast);
+        }
         private async void TakePhoto_Click(object sender, RoutedEventArgs e)
         {
             if (phototaken == 0)

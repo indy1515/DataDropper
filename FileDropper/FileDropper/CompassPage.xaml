@@ -78,9 +78,9 @@
                 <AppBarButton
                     x:Name="listBtn"
                     x:Uid="ForwardAppBarButton"
-                    
+                    Click="ClickComingSoon"
                     Icon="List"
-                    Label="Item List" HorizontalContentAlignment="Left"/>
+                    Label="History" HorizontalContentAlignment="Left"/>
 
                 <AppBarButton
                     x:Name="upload"

@@ -618,6 +618,11 @@ namespace FileDropper
 
 
         }
+        private async void ClickComingSoon(object sender, RoutedEventArgs e)
+        {
+            ShowToastNotification("Coming Soon!");
+            await Task.Delay(2000);
+        }
 
         private void ClickToRefresh(object sender, RoutedEventArgs e)
         {

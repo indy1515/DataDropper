@@ -61,7 +61,7 @@
                         <Image x:Name="CameraIcon" Source="ms-appx:///Assets/Camera/Capture.png" Stretch="Fill" PointerPressed="CameraPress" PointerReleased="CameraRelease"/>
                     </StackPanel>
                 </Button>
-                <Button BorderBrush="Transparent" x:Name="toListFileButton" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="toListFile_Click" Margin="0,0,0,20">
+                <Button BorderBrush="Transparent" x:Name="toListFileButton" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="ClickComingSoon" Margin="0,0,0,20">
                     <StackPanel Height="50" Width="50">
                         <Image Source="ms-appx:///Assets/Camera/ListBar.png" Stretch="Fill"/>
                     </StackPanel>
