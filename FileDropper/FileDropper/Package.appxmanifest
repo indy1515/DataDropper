@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest" xmlns:m3="http://schemas.microsoft.com/appx/2014/manifest" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest">
-  <Identity Name="2ffa0d08-4de0-43c0-b3dc-ece84dab500b" Publisher="CN=IndyZa" Version="1.0.0.0" />
-  <mp:PhoneIdentity PhoneProductId="2ffa0d08-4de0-43c0-b3dc-ece84dab500b" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
+  <Identity Name="14718IndyZa.FileSeek" Publisher="CN=DA4E985D-2D21-4F1D-9FD7-EF0E0F5DD2C4" Version="1.1.0.2" />
+  <mp:PhoneIdentity PhoneProductId="8c989f88-2c93-462b-b59e-cdba14c80e84" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
-    <DisplayName>FileDropper</DisplayName>
+    <DisplayName>File&amp;Seek</DisplayName>
     <PublisherDisplayName>IndyZa</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -16,7 +16,7 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="FileDropper.App">
-      <m3:VisualElements DisplayName="File&amp;Seek" Square150x150Logo="Assets\Logo.png" Square44x44Logo="Assets\SmallLogo.png" Description="File&amp;Seek Application: an app to provide full real treasure experience!" ForegroundText="light" BackgroundColor="transparent" ToastCapable="true">
+      <m3:VisualElements DisplayName="File&amp;Seek" Square150x150Logo="Assets\Logo.png" Square44x44Logo="Assets\SmallLogo.png" Description="Share your files with all of your friends with a new and more enjoyable way. This app work will let you drop your files such as picture, movies, text and many more." ForegroundText="light" BackgroundColor="transparent" ToastCapable="true">
         <m3:DefaultTile Wide310x150Logo="Assets\WideLogo.png" Square71x71Logo="Assets\app_icon\app_icon71x71.png">
         </m3:DefaultTile>
         <m3:SplashScreen Image="Assets\SplashScreen.png" />

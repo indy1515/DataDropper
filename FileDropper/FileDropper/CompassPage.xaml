@@ -44,22 +44,22 @@
         <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,54">
 
 
-            <Image x:Name="indicator" HorizontalAlignment="Center" Height="350"  VerticalAlignment="Center" Width="350" Source="Assets/Compass/Indicator.png" RenderTransformOrigin="0.5,0.5">
+            <Image x:Name="indicator" HorizontalAlignment="Center" Height="330"  VerticalAlignment="Center" Width="330" Source="Assets/Compass/Indicator.png" RenderTransformOrigin="0.5,0.5">
                 <Image.RenderTransform>
                     <RotateTransform x:Name="rotateTransform"/>
                 </Image.RenderTransform>
             </Image>
-            <Image x:Name="compassImg" HorizontalAlignment="Center" Height="350"  VerticalAlignment="Center" Width="350" Source="Assets/Compass/Outer_Ring.png" RenderTransformOrigin="0.5,0.5">
+            <Image x:Name="compassImg" HorizontalAlignment="Center" Height="330"  VerticalAlignment="Center" Width="330" Source="Assets/Compass/Outer_Ring.png" RenderTransformOrigin="0.5,0.5">
                 <Image.RenderTransform>
                     <RotateTransform x:Name="rotateTransform_compass"/>
                 </Image.RenderTransform>
             </Image>
-            <Image x:Name="fileImg" HorizontalAlignment="Center" Height="350"  VerticalAlignment="Center" Width="350" Source="Assets/file.png" RenderTransformOrigin="0.5,0.5">
+            <Image x:Name="fileImg" HorizontalAlignment="Center" Height="340"  VerticalAlignment="Center" Width="330" Source="Assets/file.png" RenderTransformOrigin="0.5,0.5">
                 <Image.RenderTransform>
                     <RotateTransform x:Name="rotateTransform_file"/>
                 </Image.RenderTransform>
             </Image>
-            <Maps:MapControl x:Name="myMapControl" HorizontalAlignment="Left" Margin="6,-139,0,0" VerticalAlignment="Top" Height="134" Width="350" MapServiceToken="HJ1Q_ons4LFZJNL4KONPmg" Opacity="0"/>
+            <Maps:MapControl x:Name="myMapControl" HorizontalAlignment="Left" Margin="6,-139,0,0" VerticalAlignment="Top" Height="134" Width="350" MapServiceToken="CW9jrJ_K5eUmS21NvF-DPw" Opacity="0"/>
             <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock x:Name="distance" Text="-" Margin="10,-6.5,0,5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}" FontSize="35"/>
@@ -67,7 +67,7 @@
                 </StackPanel>
             </Grid>
         </Grid>
-        <Button x:Name="pickBtn" Content="Pick File!" HorizontalAlignment="Center" Margin="34,364.5,37,0" Grid.Row="1" VerticalAlignment="Center" Width="329"/>
+        <Button x:Name="pickBtn" Content="Pick File!" HorizontalAlignment="Center" Margin="34,350.5,37,0" Grid.Row="1" VerticalAlignment="Center" Width="310"/>
 
 
 

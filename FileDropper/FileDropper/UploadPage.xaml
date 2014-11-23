@@ -30,7 +30,7 @@
         <!--TODO: Content should be placed within the following grid-->
         <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
             <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                <Maps:MapControl x:Name="myMapControl" HorizontalAlignment="Center"  VerticalAlignment="Center" Height="134" MapServiceToken="HJ1Q_ons4LFZJNL4KONPmg" Margin="0,0,0,11" Width="358" MinWidth="340" />
+                <Maps:MapControl x:Name="myMapControl" HorizontalAlignment="Center"  VerticalAlignment="Center" Height="134" MapServiceToken="CW9jrJ_K5eUmS21NvF-DPw" Margin="0,0,0,11" Width="358" MinWidth="340" />
                 <TextBox Name="display_name" Header="Display Name"/>
                 <TextBox Name="your_name" Header="Your Name"/>
                 <TextBox Name="file_name" TextChanged="FileTextListener" Header="Filename"/>

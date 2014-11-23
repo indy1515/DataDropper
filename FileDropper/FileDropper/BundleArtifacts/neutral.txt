@@ -1,0 +1,4 @@
+MainPackage=\\vmware-host\Shared Folders\Desktop\Windows Phone Project\FileDropper\FileDropper\bin\Release\FileDropper_1.1.0.2_Bundle\FileDropper_1.1.0.2_AnyCPU.appx
+SymbolPackage=\\vmware-host\Shared Folders\Desktop\Windows Phone Project\FileDropper\FileDropper\AppPackages\FileDropper_1.1.0.2_Test\FileDropper_1.1.0.2_AnyCPU.appxsym
+ResourcePack=\\vmware-host\Shared Folders\Desktop\Windows Phone Project\FileDropper\FileDropper\bin\Release\FileDropper_1.1.0.2_Bundle\FileDropper_1.1.0.2_scale-100.appx
+ResourcePack=\\vmware-host\Shared Folders\Desktop\Windows Phone Project\FileDropper\FileDropper\bin\Release\FileDropper_1.1.0.2_Bundle\FileDropper_1.1.0.2_scale-140.appx

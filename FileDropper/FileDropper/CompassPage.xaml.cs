@@ -224,7 +224,7 @@ namespace FileDropper
             Debug.WriteLine("Type: " + type);
             this.fileImg.Source = new BitmapImage(new Uri("ms-appx:///Assets/" + type + ".png"));
             this.fileType.Source = new BitmapImage(new Uri("ms-appx:///Assets/Compass/" + type + ".png"));
-            myMapControl.MapServiceToken = "HJ1Q_ons4LFZJNL4KONPmg";
+            myMapControl.MapServiceToken = "CW9jrJ_K5eUmS21NvF-DPw";
             if (DeviceInfo.IsRunningOnEmulator)
             {
                 myMapControl.Center = current_file.NearestFile.Position;
