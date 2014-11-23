@@ -76,7 +76,7 @@ namespace FileDropper
         public static readonly string PHOTO = "image";
         public static readonly string VIDEO = "video";
         public static readonly string FILE = "file";
-        public FileData():this("No name","0","0","Annonymous","unknown.txt")
+        public FileData():this("File Not Found","0","0","Annonymous","Error")
         {
 
         }
