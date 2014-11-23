@@ -144,6 +144,7 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Camera\cam.jpeg" />
     <Content Include="Assets\Camera\Capture.png" />
     <Content Include="Assets\Camera\Capture_Pressed.png" />
     <Content Include="Assets\Camera\check.png" />
