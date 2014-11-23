@@ -27,10 +27,11 @@
         <StackPanel Grid.Row="0" Margin="19,0,0,0">
             <StackPanel Orientation="Horizontal">
                 <Image Source="Assets/Compass/app_icon.png" Width="80" Height="90"></Image>
-                <TextBlock Text="Dropper" Style="{ThemeResource TitleTextBlockStyle}" Margin="10,0,0,0" VerticalAlignment="Center" FontSize="45" HorizontalAlignment="Left" LineStackingStrategy="BaselineToBaseline" TextTrimming="Clip" TextLineBounds="TrimToCapHeight"/>
+                <TextBlock Text="COMPASS" Style="{ThemeResource TitleTextBlockStyle}" Margin="10,0,0,0" VerticalAlignment="Center" FontSize="45" HorizontalAlignment="Left" LineStackingStrategy="BaselineToBaseline" TextTrimming="Clip" TextLineBounds="TrimToCapHeight" FontFamily="Segoe WP Light" FontWeight="Normal"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <TextBlock x:Name="filename" Text="Unknown" Margin="0,-6.5,0,0" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}" FontSize="30"/>
+                <Image x:Name="fileType" Source="Assets/Compass/filebig.png" Width="30" Margin="0,0,6,0"/>
+                <TextBlock x:Name="filename" Text="Unknown" Margin="0,0,0,0" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}" FontSize="30"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock x:Name="type"  Text="File" Margin="0,-6.5,0,0" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}" FontSize="24"/>
@@ -68,7 +69,7 @@
         </Grid>
         <Button x:Name="pickBtn" Content="Pick File!" HorizontalAlignment="Center" Margin="34,364.5,37,0" Grid.Row="1" VerticalAlignment="Center" Width="329"/>
 
-    
+
 
     </Grid>
     <Page.BottomAppBar>
@@ -90,9 +91,9 @@
                 <AppBarButton
                     x:Name="scanBtn"
                     x:Uid="ForwardAppBarButton"
-                    
-                    Icon="Zoom"
-                    Label="Scan Area" HorizontalContentAlignment="Left"/>
+                    Click="ClickToRefresh"
+                    Icon="Refresh"
+                    Label="Re-Scan" HorizontalContentAlignment="Left"/>
                 <AppBarButton
                     x:Name="camera"
                     x:Uid="ForwardAppBarButton"

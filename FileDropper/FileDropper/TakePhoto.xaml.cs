@@ -177,7 +177,7 @@ namespace FileDropper
                 //CreationCollisionOption.GenerateUniqueName);
 
                 StorageFolder folder = KnownFolders.CameraRoll;
-                StorageFile file = await folder.CreateFileAsync("temp.jpg", CreationCollisionOption.GenerateUniqueName);
+                file = await folder.CreateFileAsync("Unnamed.jpg", CreationCollisionOption.GenerateUniqueName);
                 // take photo
                 await captureManager.CapturePhotoToStorageFileAsync(imgFormat, file);
 
@@ -253,7 +253,7 @@ namespace FileDropper
             
             if (TakePhotoButton.Visibility == Visibility.Visible)
             {
-                changevideo.Source = new BitmapImage(new Uri(@"ms-appx:///Assets/Camera/cam.jpeg", UriKind.RelativeOrAbsolute));
+                changevideo.Source = new BitmapImage(new Uri(@"ms-appx:///Assets/Camera/camera.png", UriKind.RelativeOrAbsolute));
                 //change video image
                 TakePhotoButton.Visibility = Visibility.Collapsed;
                 TakeVideoButton.Visibility = Visibility.Visible;
@@ -340,11 +340,7 @@ namespace FileDropper
             }
         }
 
-        private void Save_Click(object sender, RoutedEventArgs e)
-        {
-            phototaken = 0;
-            //TODO Windows.Storage.Streams.IRandomAccessStream stream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read);
-        }
+
 
         private async void TakeVideo_Click(object sender, RoutedEventArgs e)
         {
@@ -366,11 +362,11 @@ namespace FileDropper
             else
             {
                 await captureManager.StopRecordAsync();
-                
+
                 VideoPreview.SetSource(await videoFile.OpenReadAsync(), videoFile.ContentType);
                 Debug.WriteLine(videoFile.Path);
 
-                
+
 
                 TakeVideoButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
                 toListFileButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
@@ -384,11 +380,9 @@ namespace FileDropper
                 CancelButton.Visibility = Visibility.Visible;
 
             }
+        }
         private async void Save_Click(object sender, RoutedEventArgs e)
         {
-
-            if (videoFile == null){
-            phototaken = 0;
             Geolocator geolocator = new Geolocator();
             geolocator.DesiredAccuracy = PositionAccuracy.High;
             geolocator.MovementThreshold = 1; // The units are meters.
@@ -397,16 +391,21 @@ namespace FileDropper
                     maximumAge: TimeSpan.FromMinutes(5),
                     timeout: TimeSpan.FromSeconds(10));
 
-            LocationFile locafile = new LocationFile(file, myLocation);
-            Frame.Navigate(typeof(UploadPage), locafile);
-            //StorageFile file = await StorageFile.CreateStreamedFileAsync()
-            //CapturedImage.Source
-            //TODO Windows.Storage.Streams.IRandomAccessStream stream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read);
+            Debug.WriteLine("Video is null: " + (videoFile == null) + " Image is null: " + (file == null));
+
+            if (videoFile == null){
+                phototaken = 0;
+                LocationFile locafile = new LocationFile(file, myLocation);
+                Frame.Navigate(typeof(UploadPage), locafile);
+                //StorageFile file = await StorageFile.CreateStreamedFileAsync()
+                //CapturedImage.Source
+                //TODO Windows.Storage.Streams.IRandomAccessStream stream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read);
             }
 
             else{
-
+                LocationFile locafile = new LocationFile(videoFile, myLocation);
                 // to do : save videoFile
+                Frame.Navigate(typeof(UploadPage), locafile);
             }
         }
 

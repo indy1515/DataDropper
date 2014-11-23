@@ -177,7 +177,7 @@ namespace FileDropper
         }
         private async void initiateCompass()
         {
-           
+
             geolocator = new Geolocator();
             geolocator.DesiredAccuracy = PositionAccuracy.High;
             geolocator.MovementThreshold = 1; // The units are meters.
@@ -206,7 +206,7 @@ namespace FileDropper
                     catch (HttpRequestException e3)
                     {
                         ShowToastNotification("No Internet Connection...Retrying...");
-                        
+
                     }
                     await Task.Delay(10000);
                 }
@@ -223,6 +223,7 @@ namespace FileDropper
             string type = current_file.NearestFile.FileType;
             Debug.WriteLine("Type: " + type);
             this.fileImg.Source = new BitmapImage(new Uri("ms-appx:///Assets/" + type + ".png"));
+            this.fileType.Source = new BitmapImage(new Uri("ms-appx:///Assets/Compass/" + type + ".png"));
             myMapControl.MapServiceToken = "HJ1Q_ons4LFZJNL4KONPmg";
             if (DeviceInfo.IsRunningOnEmulator)
             {
@@ -449,9 +450,11 @@ namespace FileDropper
             string type = current_file.NearestFile.FileType;
             Debug.WriteLine("Type: " + type);
             ImageSource filetypeImage = new BitmapImage(new Uri("ms-appx:///Assets/" + type + ".png"));
-            if (this.fileImg.Source != filetypeImage )
+            ImageSource filetypeImageBig = new BitmapImage(new Uri("ms-appx:///Assets/Compass/" + type + "big.png"));
+            if (this.fileImg.Source != filetypeImage)
             {
                 this.fileImg.Source = filetypeImage;
+                this.fileType.Source = filetypeImageBig;
             }
         }
         private void updateFilePosition()
@@ -615,12 +618,18 @@ namespace FileDropper
 
 
         }
-        
 
+        private void ClickToRefresh(object sender, RoutedEventArgs e)
+        {
+            initiateCompass();
+            updateIndicator();
+            updateDistance();
+            updateUserFile();
+        }
         private void toUploadPage(object sender, RoutedEventArgs e)
         {
             LocationFile locafile = new LocationFile(null, myLocation);
-            Frame.Navigate(typeof(UploadPage),locafile);
+            Frame.Navigate(typeof(UploadPage), locafile);
         }
 
         private void toTakePhotoPage(object sender, RoutedEventArgs e)

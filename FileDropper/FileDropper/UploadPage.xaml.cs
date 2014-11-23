@@ -176,6 +176,7 @@ namespace FileDropper
                     locafile.Position.Coordinate.Point.Position.Latitude + "", locafile.Position.Coordinate.Point.Position.Longitude + "",
                     your_name.Text, file_name.Text), uploaded_file);
                 ShowToastNotification("Done Uploading " + upload_filename.Text);
+                Frame.Navigate(typeof(CompassPage), locafile);
                 Debug.WriteLine("Response: " + response);
             }
         }

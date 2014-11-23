@@ -19,7 +19,10 @@ namespace FileDropper
             this.File = file;
             this.Position = position;
         }
+
+
         public StorageFile File { get; private set; }
         public Geoposition Position { get; private set; }
+        
     }
 }
